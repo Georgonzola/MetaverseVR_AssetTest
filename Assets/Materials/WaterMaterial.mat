@@ -34,13 +34,13 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Depth: 10
+    - _Depth: 6.19
     - _Fresnel: 0
-    - _HeightFade: 19.86
-    - _HeightOffset: 0.06
+    - _HeightFade: 7.23
+    - _HeightOffset: 0.2
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _Strength: 0.05
+    - _Strength: 0.357
     m_Colors:
     - _DepthColour: {r: 0, g: 0, b: 0, a: 0}
     - _DipColour: {r: 0.10906907, g: 0.13508944, b: 0.1792453, a: 1}

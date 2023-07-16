@@ -4,22 +4,25 @@ using System.Collections.Generic;
 using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEngine;
+using static UnityEditor.PlayerSettings;
+using static UnityEngine.GraphicsBuffer;
 
 public class WaveController : MonoBehaviour
 {
 
 
-    [SerializeField] private float offset = 80f;
-    [SerializeField] private float intensity = 10f;
-    // private MeshFilter meshFilter;
-    [SerializeField] private int detail = 100;
-    [SerializeField] private int size = 10;
-    [SerializeField] private float waveSize = 8f;
+    [SerializeField] private float waveSpeed = 0.03f;
+    [SerializeField] private float waveDirection = 45f;
+    [SerializeField] private float waveSize = 20f;
+
+    private int planeDetail = 250;
+    private int planeSize = 1;
 
     private MeshFilter meshFilter;
 
     private Mesh mesh;
 
+    public WaveData[] Waves;
 
     // Start is called before the first frame update
     void Start()
@@ -32,7 +35,14 @@ public class WaveController : MonoBehaviour
         meshFilter = this.AddComponent<MeshFilter>();
         meshFilter.mesh = mesh;
 
+        //perlinPoints = new float[detail + 1, detail + 1];
+        //for(int x = 0; x<=detail; x++)
+        //    for (int y = 0; y <= detail; y++)
+        //        perlinPoints[x, y] = Mathf.PerlinNoise((float)x + 0.1f, (float)y + 0.1f);
+
+
         //transform.Translate(new Vector3(-detail/2*size, 0, -detail/2*size));
+
     }
 
 
@@ -46,14 +56,14 @@ public class WaveController : MonoBehaviour
     }
     private void GenerateGeometry()
     {
-        
 
-        var verts = new Vector3[(detail+1)*(detail+1)];
+
+        var verts = new Vector3[(planeDetail + 1) * (planeDetail + 1)];
 
         //equaly distributed verts
-        for (int x = 0; x <= detail; x++)
-            for (int z = 0; z <= detail; z++)
-                verts[index(x, z)] = new Vector3(x*size, 0, z*size);
+        for (int x = 0; x <= planeDetail; x++)
+            for (int z = 0; z <= planeDetail; z++)
+                verts[index(x, z)] = new Vector3(x * planeSize, 0, z * planeSize);
 
         mesh.vertices = verts;
 
@@ -61,9 +71,9 @@ public class WaveController : MonoBehaviour
         var tries = new int[mesh.vertices.Length * 6];
 
         //two triangles are one tile
-        for (int x = 0; x < detail; x++)
+        for (int x = 0; x < planeDetail; x++)
         {
-            for (int z = 0; z < detail; z++)
+            for (int z = 0; z < planeDetail; z++)
             {
                 tries[index(x, z) * 6 + 0] = index(x, z);
                 tries[index(x, z) * 6 + 1] = index(x + 1, z + 1);
@@ -83,45 +93,81 @@ public class WaveController : MonoBehaviour
 
     private int index(int x, int z)
     {
-        return x * (detail+1) + z;
+        return x * (planeDetail + 1) + z;
     }
 
     private void setWaves()
     {
+
         var verts = mesh.vertices;
-        for (int x = 0; x <= detail; x++)
+        //waveDirection = waveDirection.normalized;
+        float xSpeed;
+        float zSpeed;
+
+
+        for (int x = 0; x <= planeDetail; x++)
         {
-            for (int z = 0; z <= detail; z++)
+            for (int z = 0; z <= planeDetail; z++)
             {
-                var y = 0f;
+                float y = 0;
+                for (int w = 0; w < Waves.Length; w++)
+                {
+                    xSpeed = Mathf.Sin(Waves[w].waveDataDirection * Mathf.Deg2Rad);
+                    zSpeed = Mathf.Cos(Waves[w].waveDataDirection * Mathf.Deg2Rad);
+                    float xOffset = verts[index(x, z)].x * xSpeed;
+                    float zOffset = verts[index(x, z)].z * zSpeed;
+                    y += Mathf.Sin(xOffset + zOffset + Time.time * Waves[w].waveDataSpeed) * Waves[w].waveDataSize;
+
+
+                }
+                    //if(x == 22 && z == 0)
+                    //{
+                    //Debug.Log("Wave");
+                    //Debug.Log(y);
+                    //}
+                verts[index(x, z)].y = y;
+
                 
-                var perl = Mathf.PerlinNoise(((float)x+0.1f)*waveSize,((float)z+0.1f)*waveSize) * intensity;
-                y += Mathf.Cos(perl + 2 * Time.time)*0.5f;
-                perl = Mathf.PerlinNoise(((float)x + 0.1f + offset)*waveSize, ((float)z + 0.1f + offset)*waveSize) * intensity;
-                y += Mathf.Cos(perl + Time.time + 2f)*0.7f;
-                verts[index(x, z)] = new Vector3(x*size, y, z*size);
+
+
             }
         }
+
         mesh.vertices = verts;
+
+
+
         mesh.RecalculateNormals();
     }
 
-    public float getWaveHeight(Vector3 pos) 
+    public float getWaveHeight(Vector3 pos)
     {
-        float closestDistance = Mathf.Infinity;
-        Vector3 closestVertex = Vector3.zero;
-        for(int i=0; i<mesh.vertices.Length; i++)
+        float y = 0;
+        //Vector3 newPos = new Vector3(Mathf.Floor(pos.x), 0, Mathf.Floor(pos.z));
+
+
+
+        for (int w = 0; w < Waves.Length; w++)
         {
-            float dist = Vector3.Distance(pos,mesh.vertices[i]);
-            if (dist <= closestDistance)
-            {
-                closestDistance = dist;
-                closestVertex = mesh.vertices[i];
-            }
+            float xSpeed = Mathf.Sin(Waves[w].waveDataDirection * Mathf.Deg2Rad);
+            float zSpeed = Mathf.Cos(Waves[w].waveDataDirection * Mathf.Deg2Rad);
+            float xOffset = pos.x * xSpeed;
+            float zOffset = pos.z * zSpeed;
+            y += Mathf.Sin((xOffset + zOffset + Time.time * Waves[w].waveDataSpeed)) * Waves[w].waveDataSize;
+
         }
-        return closestVertex.y;
+        return y;
 
     }
 
+
+
+    [Serializable]
+    public struct WaveData
+    {
+        public float waveDataSpeed;
+        public float waveDataDirection;
+        public float waveDataSize;
+    }
 
 }
