@@ -19,7 +19,7 @@ public class CameraFollow : MonoBehaviour
     }
 
     // Update is called once per frame
-    void LateUpdate()
+    void FixedUpdate()
     {
         transform.LookAt(targetLook);
         transform.position = Vector3.SmoothDamp(transform.position, targetPosition.position, ref velocity, smoothTime);

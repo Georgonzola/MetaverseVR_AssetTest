@@ -9,13 +9,16 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: WaterMaterial
   m_Shader: {fileID: -6465566751694194690, guid: 1ae221ccb40c8584c8930c8bf9154e77, type: 3}
-  m_ValidKeywords: []
+  m_ValidKeywords:
+  - _ALPHATEST_ON
+  - _SURFACE_TYPE_TRANSPARENT
   m_InvalidKeywords: []
   m_LightmapFlags: 2
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
-  stringTagMap: {}
+  stringTagMap:
+    RenderType: Transparent
   disabledShaderPasses: []
   m_SavedProperties:
     serializedVersion: 3
@@ -34,13 +37,25 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Depth: 6.19
+    - _AlphaClip: 1
+    - _Blend: 0
+    - _CastShadows: 1
+    - _Cull: 2
+    - _Depth: 1
+    - _DstBlend: 10
     - _Fresnel: 0
-    - _HeightFade: 7.23
-    - _HeightOffset: 0.2
+    - _HeightFade: 0.3
+    - _HeightOffset: -0
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _Strength: 0.357
+    - _ReceiveShadows: 1
+    - _SrcBlend: 5
+    - _Strength: 0.372
+    - _Surface: 1
+    - _WorkflowMode: 1
+    - _ZTest: 4
+    - _ZWrite: 1
+    - _ZWriteControl: 1
     m_Colors:
     - _DepthColour: {r: 0, g: 0, b: 0, a: 0}
     - _DipColour: {r: 0.10906907, g: 0.13508944, b: 0.1792453, a: 1}

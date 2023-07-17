@@ -7,8 +7,8 @@ public class PlayerBoatController : MonoBehaviour
 
     [SerializeField] private PlayerInput playerInput;
     private Rigidbody boatRB;
-    private float maxForwardSpeed = 25f;
-    private float maxReverseSpeed = -10f;
+    private float maxForwardSpeed = 10f;
+    private float maxReverseSpeed = -3f;
 
 
 
@@ -19,7 +19,7 @@ public class PlayerBoatController : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         calculateMovement();
     }
@@ -29,26 +29,34 @@ public class PlayerBoatController : MonoBehaviour
      
         //Set movement
         Vector3 movement = transform.forward * playerInput.GetCharacterMovement().y;
-        boatRB.AddForceAtPosition(movement.normalized*0.5f, transform.position, ForceMode.Impulse);
+        boatRB.AddForce(movement.normalized*0.5f, ForceMode.Impulse);
 
 
 
         //Adjusts turn speed based on velocity - minimised turning when slow or still (more realistic)
         Vector3 moveVelocity = new Vector3(boatRB.velocity.x, 0, boatRB.velocity.z);
+
+
         float turnSpeed = remap(moveVelocity.magnitude, maxReverseSpeed*2, maxForwardSpeed, -1, 1);
         if (turnSpeed < 0) { turnSpeed *= -1; }
 
+
+
         //Set rotation
         Vector3 rotation = transform.rotation.eulerAngles * playerInput.GetCharacterMovement().x;
-        boatRB.AddTorque(rotation.normalized*0.05f*turnSpeed, ForceMode.Impulse);
+        boatRB.AddRelativeTorque(rotation.normalized*2f*turnSpeed, ForceMode.Acceleration);
+
+
+
 
         //Reorient rotation to follow forward vector (more realistic)
-        Vector3 steerVelocity = transform.forward * moveVelocity.magnitude;
-        boatRB.velocity = new Vector3 (steerVelocity.x, boatRB.velocity.y, steerVelocity.z);
+        //Vector3 steerVelocity = transform.forward * moveVelocity.magnitude;
+        //boatRB.velocity = new Vector3 (steerVelocity.x, boatRB.velocity.y, steerVelocity.z);
 
 
         //Set maximum speed
-        if(boatRB.velocity.magnitude > maxForwardSpeed)
+
+        if (boatRB.velocity.magnitude > maxForwardSpeed)
         {
             boatRB.velocity = boatRB.velocity.normalized*maxForwardSpeed;
         }

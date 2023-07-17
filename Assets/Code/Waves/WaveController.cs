@@ -11,9 +11,9 @@ public class WaveController : MonoBehaviour
 {
 
 
-    [SerializeField] private float waveSpeed = 0.03f;
-    [SerializeField] private float waveDirection = 45f;
-    [SerializeField] private float waveSize = 20f;
+    //[SerializeField] private float waveSpeed = 0.03f;
+    //[SerializeField] private float waveDirection = 45f;
+    //[SerializeField] private float waveSize = 20f;
 
     private int planeDetail = 250;
     private int planeSize = 1;
@@ -153,7 +153,7 @@ public class WaveController : MonoBehaviour
             float zSpeed = Mathf.Cos(Waves[w].waveDataDirection * Mathf.Deg2Rad);
             float xOffset = pos.x * xSpeed;
             float zOffset = pos.z * zSpeed;
-            y += Mathf.Sin((xOffset + zOffset + Time.time * Waves[w].waveDataSpeed)) * Waves[w].waveDataSize;
+            y += Mathf.Sin(((xOffset + zOffset + Time.time * Waves[w].waveDataSpeed))) * Waves[w].waveDataSize;
 
         }
         return y;
@@ -168,6 +168,7 @@ public class WaveController : MonoBehaviour
         public float waveDataSpeed;
         public float waveDataDirection;
         public float waveDataSize;
+
     }
 
 }
