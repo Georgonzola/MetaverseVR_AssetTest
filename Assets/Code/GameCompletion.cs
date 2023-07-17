@@ -7,7 +7,7 @@ public class GameCompletion : MonoBehaviour
 
 
     private float countdownTotal = 4f;
-    private float countdown = 4f;
+    private float countdown = 3f;
     // Start is called before the first frame update
 
     private BoxCollider completionBox;
@@ -37,7 +37,7 @@ public class GameCompletion : MonoBehaviour
 
         if (allIn)
         {
-            //Debug.Log(countdown);
+           // Debug.Log(countdown);
             countdown -= Time.deltaTime;
         }
         else
@@ -48,7 +48,7 @@ public class GameCompletion : MonoBehaviour
         if(countdown < 0)
         {
             menuController.changeScene(1);
-            Debug.Log("Winner");
+           // Debug.Log("Winner");
         }
     }
 }

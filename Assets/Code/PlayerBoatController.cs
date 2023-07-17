@@ -8,9 +8,15 @@ public class PlayerBoatController : MonoBehaviour
     [SerializeField] private PlayerInput playerInput;
     private Rigidbody boatRB;
     private float maxForwardSpeed = 10f;
-    private float maxReverseSpeed = -3f;
+    private float maxReverseSpeed = 5f;
+
+    private float iFrames = 1f;
 
 
+    [SerializeField] private int health = 10;
+
+
+    [SerializeField] private MenuController menuController;
 
     // Start is called before the first frame update
     void Start()
@@ -61,14 +67,35 @@ public class PlayerBoatController : MonoBehaviour
             boatRB.velocity = boatRB.velocity.normalized*maxForwardSpeed;
         }
 
-        if (boatRB.velocity.magnitude < maxReverseSpeed)
+        //if (boatRB.velocity.magnitude < maxReverseSpeed)
+        //{
+        //    boatRB.velocity = boatRB.velocity.normalized * maxReverseSpeed;
+        //}
+
+        iFrames -= Time.deltaTime;
+        if(iFrames < 0)
+            iFrames = 0;
+
+
+        if (health <= 0)
         {
-            boatRB.velocity = boatRB.velocity.normalized * maxReverseSpeed;
+            menuController.changeScene(1);
         }
 
     }
 
+    public void OnShipHit(Vector3 shipPosition)
+    {
+        //Vector3 pushDirection = shipPosition - transform.position;
+        //boatRB.AddForce(-pushDirection*1000f, ForceMode.Force);
+        if(iFrames == 0)
+        {
+            //Debug.Log("HIT");
+            iFrames = 1;
+            health--;
+        }
 
+    }
 
     public float remap(float aValue, float aLow, float aHigh, float bLow, float bHigh)
     {
