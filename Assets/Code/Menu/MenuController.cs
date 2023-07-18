@@ -7,6 +7,16 @@ public class MenuController : MonoBehaviour
 {
     public void changeScene(int sceneIndex)
     {
+
+
         SceneManager.LoadScene(sceneIndex);
+        
+        if (sceneIndex == 1)
+        {
+            WinStateTracker winTracker = GameObject.Find("/WinStateTracker").GetComponent<WinStateTracker>();
+            winTracker.setWinState(false);
+            
+        }
+
     }
 }

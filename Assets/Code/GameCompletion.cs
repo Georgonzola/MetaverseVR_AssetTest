@@ -16,11 +16,15 @@ public class GameCompletion : MonoBehaviour
 
     [SerializeField] private MenuController menuController;
 
+    //[SerializeField] private WinStateTracker winStateTracker;
+
+
     private bool allIn = false;
     void Start()
     {
         completionBox = GetComponent<BoxCollider>();
         //floaterPoints = new Transform[4];
+        
     }
 
     // Update is called once per frame
@@ -47,8 +51,9 @@ public class GameCompletion : MonoBehaviour
 
         if(countdown < 0)
         {
-            menuController.changeScene(1);
-           // Debug.Log("Winner");
+            WinStateTracker winTracker = GameObject.Find("WinStateTracker").GetComponent<WinStateTracker>();
+            winTracker.setWinState(true);
+            menuController.changeScene(2);
         }
     }
 }

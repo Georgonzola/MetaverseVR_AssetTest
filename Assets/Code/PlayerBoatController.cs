@@ -1,23 +1,27 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerBoatController : MonoBehaviour
 {
 
     [SerializeField] private PlayerInput playerInput;
     private Rigidbody boatRB;
-    private float maxForwardSpeed = 10f;
+    private float maxForwardSpeed = 9f;
     private float maxReverseSpeed = 5f;
 
     private float iFrames = 1f;
 
 
-    [SerializeField] private int health = 10;
+    [SerializeField] private int health = 5;
 
 
     [SerializeField] private MenuController menuController;
 
+    [SerializeField] private Image healthUI;
+
+    private float tiltTheshold = 110f;
     // Start is called before the first frame update
     void Start()
     {
@@ -43,7 +47,7 @@ public class PlayerBoatController : MonoBehaviour
         Vector3 moveVelocity = new Vector3(boatRB.velocity.x, 0, boatRB.velocity.z);
 
 
-        float turnSpeed = remap(moveVelocity.magnitude, maxReverseSpeed*2, maxForwardSpeed, -1, 1);
+        float turnSpeed = remap(moveVelocity.magnitude, 0, maxForwardSpeed, 0, 1);
         if (turnSpeed < 0) { turnSpeed *= -1; }
 
 
@@ -51,9 +55,6 @@ public class PlayerBoatController : MonoBehaviour
         //Set rotation
         Vector3 rotation = transform.rotation.eulerAngles * playerInput.GetCharacterMovement().x;
         boatRB.AddRelativeTorque(rotation.normalized*2f*turnSpeed, ForceMode.Acceleration);
-
-
-
 
         //Reorient rotation to follow forward vector (more realistic)
         //Vector3 steerVelocity = transform.forward * moveVelocity.magnitude;
@@ -67,32 +68,36 @@ public class PlayerBoatController : MonoBehaviour
             boatRB.velocity = boatRB.velocity.normalized*maxForwardSpeed;
         }
 
+        //Redo reverse max speed
+
         //if (boatRB.velocity.magnitude < maxReverseSpeed)
         //{
         //    boatRB.velocity = boatRB.velocity.normalized * maxReverseSpeed;
         //}
+
+
 
         iFrames -= Time.deltaTime;
         if(iFrames < 0)
             iFrames = 0;
 
 
-        if (health <= 0)
+        //Check if player health is zero or boat has capsised
+        if (health <= 0 || transform.rotation.eulerAngles.x > tiltTheshold || transform.rotation.eulerAngles.x < -tiltTheshold)
         {
-            menuController.changeScene(1);
+            menuController.changeScene(2);
         }
 
     }
 
     public void OnShipHit(Vector3 shipPosition)
     {
-        //Vector3 pushDirection = shipPosition - transform.position;
-        //boatRB.AddForce(-pushDirection*1000f, ForceMode.Force);
+
         if(iFrames == 0)
         {
-            //Debug.Log("HIT");
             iFrames = 1;
             health--;
+            healthUpdate();
         }
 
     }
@@ -102,4 +107,11 @@ public class PlayerBoatController : MonoBehaviour
         float normal = Mathf.InverseLerp(aLow, aHigh, aValue);
         return Mathf.Lerp(bLow, bHigh, normal);
     }
+    private void healthUpdate()
+    {
+        healthUI.fillAmount = remap(health, 0, 5, 0, 1);
+
+    }
+
+
 }
