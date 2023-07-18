@@ -83,10 +83,13 @@ public class PlayerBoatController : MonoBehaviour
 
 
         //Check if player health is zero or boat has capsised
-        if (health <= 0 || transform.rotation.eulerAngles.x > tiltTheshold || transform.rotation.eulerAngles.x < -tiltTheshold)
+        if (health <= 0 || transform.up.y < -0.5)
         {
             menuController.changeScene(2);
         }
+
+
+        Debug.Log(transform.up);
 
     }
 
