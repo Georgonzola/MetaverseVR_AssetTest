@@ -344,7 +344,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 75826562}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 78.196, y: 0, z: 93.307}
+  m_LocalPosition: {x: 78.196, y: 0.28, z: 93.307}
   m_LocalScale: {x: 1.79, y: 1.5, z: 3.9905188}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -369,6 +369,7 @@ MonoBehaviour:
   - {fileID: 59338977}
   - {fileID: 221035632}
   menuController: {fileID: 75826568}
+  compMat: {fileID: 2100000, guid: 4b056f1dfd031dc4facd3b5c1fcd6301, type: 2}
 --- !u!114 &75826568
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5806,9 +5807,17 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 644638506}
     - target: {fileID: 1866147001, guid: 69495fe85afa57546bdaa0763706976a, type: 3}
+      propertyPath: cameraTarget
+      value: 
+      objectReference: {fileID: 1508850367}
+    - target: {fileID: 1866147001, guid: 69495fe85afa57546bdaa0763706976a, type: 3}
       propertyPath: menuController
       value: 
       objectReference: {fileID: 1527125849}
+    - target: {fileID: 1866147001, guid: 69495fe85afa57546bdaa0763706976a, type: 3}
+      propertyPath: windowPosition
+      value: 
+      objectReference: {fileID: 1249817343}
     - target: {fileID: 743520114036973187, guid: 69495fe85afa57546bdaa0763706976a, type: 3}
       propertyPath: waveController
       value: 

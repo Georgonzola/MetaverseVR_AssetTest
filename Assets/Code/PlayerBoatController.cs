@@ -9,7 +9,6 @@ public class PlayerBoatController : MonoBehaviour
     [SerializeField] private PlayerInput playerInput;
     private Rigidbody boatRB;
     private float maxForwardSpeed = 9f;
-    private float maxReverseSpeed = 5f;
 
     private float iFrames = 1f;
 
@@ -21,7 +20,12 @@ public class PlayerBoatController : MonoBehaviour
 
     [SerializeField] private Image healthUI;
 
-    private float tiltTheshold = 110f;
+    [SerializeField] private Transform cameraTarget;
+
+    [SerializeField] private Transform windowPosition;
+
+    private float mouseSensitivity = 0.9f;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -32,14 +36,22 @@ public class PlayerBoatController : MonoBehaviour
     void FixedUpdate()
     {
         calculateMovement();
+        calculateCameraMovement();
     }
 
     private void calculateMovement()
     {
-     
+
+        float multiplier = 0.5f;
         //Set movement
+        if (playerInput.GetCharacterMovement().y < 0)
+        {
+            multiplier = 0.1f;
+        }
+
+
         Vector3 movement = transform.forward * playerInput.GetCharacterMovement().y;
-        boatRB.AddForce(movement.normalized*0.5f, ForceMode.Impulse);
+        boatRB.AddForce(movement.normalized*multiplier, ForceMode.Impulse);
 
 
 
@@ -56,6 +68,8 @@ public class PlayerBoatController : MonoBehaviour
         Vector3 rotation = transform.rotation.eulerAngles * playerInput.GetCharacterMovement().x;
         boatRB.AddRelativeTorque(rotation.normalized*2f*turnSpeed, ForceMode.Acceleration);
 
+
+
         //Reorient rotation to follow forward vector (more realistic)
         //Vector3 steerVelocity = transform.forward * moveVelocity.magnitude;
         //boatRB.velocity = new Vector3 (steerVelocity.x, boatRB.velocity.y, steerVelocity.z);
@@ -67,14 +81,6 @@ public class PlayerBoatController : MonoBehaviour
         {
             boatRB.velocity = boatRB.velocity.normalized*maxForwardSpeed;
         }
-
-        //Redo reverse max speed
-
-        //if (boatRB.velocity.magnitude < maxReverseSpeed)
-        //{
-        //    boatRB.velocity = boatRB.velocity.normalized * maxReverseSpeed;
-        //}
-
 
 
         iFrames -= Time.deltaTime;
@@ -89,7 +95,15 @@ public class PlayerBoatController : MonoBehaviour
         }
 
 
-        Debug.Log(transform.up);
+
+
+    }
+
+    private void calculateCameraMovement()
+    {
+        //Debug.Log(playerInput.GetMouseMovement());
+
+        cameraTarget.RotateAround(windowPosition.position, Vector3.up, -playerInput.GetMouseMovement().x*mouseSensitivity*Time.deltaTime * -1);
 
     }
 

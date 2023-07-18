@@ -1,5 +1,5 @@
 {
-    "name": "PlayerInput",
+    "name": "InputActions",
     "maps": [
         {
             "name": "PlayerControl",
@@ -9,6 +9,15 @@
                     "name": "Movement",
                     "type": "Value",
                     "id": "42e416b5-a16f-4122-9128-fc92f1663fcd",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "CameraMovement",
+                    "type": "Value",
+                    "id": "1ca29a03-91cf-4e34-bdb9-1d9dbccdbab6",
                     "expectedControlType": "Vector2",
                     "processors": "",
                     "interactions": "",
@@ -70,6 +79,17 @@
                     "action": "Movement",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "7371f146-aeb1-4570-8cb5-84bcb68e0627",
+                    "path": "<Pointer>/delta",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "CameraMovement",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         }

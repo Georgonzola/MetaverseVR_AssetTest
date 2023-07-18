@@ -6,7 +6,7 @@ public class GameCompletion : MonoBehaviour
 {
 
 
-    private float countdownTotal = 4f;
+    private float countdownTotal = 3f;
     private float countdown = 3f;
     // Start is called before the first frame update
 
@@ -16,15 +16,24 @@ public class GameCompletion : MonoBehaviour
 
     [SerializeField] private MenuController menuController;
 
-    //[SerializeField] private WinStateTracker winStateTracker;
+
+    [SerializeField] private Material compMat;
+
+    private Color32 yellow;
+    private Color32 currentColour;
 
 
+    private float green = 95f;
     private bool allIn = false;
-    void Start()
+
+
+    
+    void Awake()
     {
         completionBox = GetComponent<BoxCollider>();
-        //floaterPoints = new Transform[4];
-        
+        yellow = new Color32(244, 255, 92, 1);
+        currentColour = yellow;
+        compMat.SetColor("_Colour", yellow);
     }
 
     // Update is called once per frame
@@ -43,10 +52,13 @@ public class GameCompletion : MonoBehaviour
         {
            // Debug.Log(countdown);
             countdown -= Time.deltaTime;
+            currentColour.r = (byte)remap(countdown, countdownTotal, 0, 244, green);
+            compMat.SetColor("_Colour", currentColour);
         }
         else
         {
             countdown = countdownTotal;
+            compMat.SetColor("_Colour", yellow);
         }
 
         if(countdown < 0)
@@ -55,5 +67,11 @@ public class GameCompletion : MonoBehaviour
             winTracker.setWinState(true);
             menuController.changeScene(2);
         }
+    }
+
+    public float remap(float aValue, float aLow, float aHigh, float bLow, float bHigh)
+    {
+        float normal = Mathf.InverseLerp(aLow, aHigh, aValue);
+        return Mathf.Lerp(bLow, bHigh, normal);
     }
 }

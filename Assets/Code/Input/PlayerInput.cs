@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class PlayerInput : MonoBehaviour
 {
-    public event EventHandler OnInteractAction;
 
     private InputActions playerInputActions;
     private void Awake()
@@ -18,4 +17,10 @@ public class PlayerInput : MonoBehaviour
     {
         return playerInputActions.PlayerControl.Movement.ReadValue<Vector2>();
     }
+
+    public Vector2 GetMouseMovement()
+    {
+        return playerInputActions.PlayerControl.CameraMovement.ReadValue < Vector2>();
+    }
+
 }
