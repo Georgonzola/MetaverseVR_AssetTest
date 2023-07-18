@@ -82,8 +82,8 @@ public class PlayerBoatController : MonoBehaviour
             iFrames = 0;
 
 
-        //Check if player health is zero or boat has capsised
-        if (health <= 0 || transform.up.y < -0.5)
+        //Check if player health is zero or boat has capsized
+        if (health <= 0 || transform.up.y < -0.1)
         {
             menuController.changeScene(2);
         }

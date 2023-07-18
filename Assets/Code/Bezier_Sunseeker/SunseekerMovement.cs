@@ -25,7 +25,7 @@ public class SunseekerMovement : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         Vector2 previousRotation = new Vector2(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.z);
         transform.LookAt(targetLocation.position);

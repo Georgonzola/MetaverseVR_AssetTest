@@ -34,15 +34,6 @@ public class WaveController : MonoBehaviour
 
         meshFilter = this.AddComponent<MeshFilter>();
         meshFilter.mesh = mesh;
-
-        //perlinPoints = new float[detail + 1, detail + 1];
-        //for(int x = 0; x<=detail; x++)
-        //    for (int y = 0; y <= detail; y++)
-        //        perlinPoints[x, y] = Mathf.PerlinNoise((float)x + 0.1f, (float)y + 0.1f);
-
-
-        //transform.Translate(new Vector3(-detail/2*size, 0, -detail/2*size));
-
     }
 
 
@@ -50,8 +41,7 @@ public class WaveController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //offset += Time.deltaTime * speed;
-        setWaves();
+       setWaves();
 
     }
     private void GenerateGeometry()
@@ -98,12 +88,9 @@ public class WaveController : MonoBehaviour
 
     private void setWaves()
     {
-
         var verts = mesh.vertices;
-        //waveDirection = waveDirection.normalized;
         float xSpeed;
         float zSpeed;
-
 
         for (int x = 0; x <= planeDetail; x++)
         {
@@ -120,32 +107,16 @@ public class WaveController : MonoBehaviour
 
 
                 }
-                    //if(x == 22 && z == 0)
-                    //{
-                    //Debug.Log("Wave");
-                    //Debug.Log(y);
-                    //}
                 verts[index(x, z)].y = y;
-
-                
-
-
             }
         }
-
         mesh.vertices = verts;
-
-
-
         mesh.RecalculateNormals();
     }
 
     public float getWaveHeight(Vector3 pos)
     {
         float y = 0;
-        //Vector3 newPos = new Vector3(Mathf.Floor(pos.x), 0, Mathf.Floor(pos.z));
-
-
 
         for (int w = 0; w < Waves.Length; w++)
         {
@@ -159,7 +130,6 @@ public class WaveController : MonoBehaviour
         return y;
 
     }
-
 
 
     [Serializable]
