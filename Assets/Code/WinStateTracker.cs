@@ -8,11 +8,9 @@ public class WinStateTracker : MonoBehaviour
     [SerializeField]
     private bool winState = false;
 
-
-    //private bool setText = true;
-    // Start is called before the first frame update
     void Awake()
     {
+        //allows the win state to be stored across scenes which is then used to set the ui text
         DontDestroyOnLoad(this.gameObject);
     }
 

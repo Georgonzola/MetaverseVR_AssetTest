@@ -44,6 +44,15 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""CursorLock"",
+                    ""type"": ""Button"",
+                    ""id"": ""08b5f968-3a14-432b-a74e-f85bf2b4d568"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -112,6 +121,17 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
                     ""action"": ""CameraMovement"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c32a4126-1681-4443-bf19-8c5f49ed3ae1"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""CursorLock"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -122,6 +142,7 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
         m_PlayerControl = asset.FindActionMap("PlayerControl", throwIfNotFound: true);
         m_PlayerControl_Movement = m_PlayerControl.FindAction("Movement", throwIfNotFound: true);
         m_PlayerControl_CameraMovement = m_PlayerControl.FindAction("CameraMovement", throwIfNotFound: true);
+        m_PlayerControl_CursorLock = m_PlayerControl.FindAction("CursorLock", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -183,12 +204,14 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
     private IPlayerControlActions m_PlayerControlActionsCallbackInterface;
     private readonly InputAction m_PlayerControl_Movement;
     private readonly InputAction m_PlayerControl_CameraMovement;
+    private readonly InputAction m_PlayerControl_CursorLock;
     public struct PlayerControlActions
     {
         private @InputActions m_Wrapper;
         public PlayerControlActions(@InputActions wrapper) { m_Wrapper = wrapper; }
         public InputAction @Movement => m_Wrapper.m_PlayerControl_Movement;
         public InputAction @CameraMovement => m_Wrapper.m_PlayerControl_CameraMovement;
+        public InputAction @CursorLock => m_Wrapper.m_PlayerControl_CursorLock;
         public InputActionMap Get() { return m_Wrapper.m_PlayerControl; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -204,6 +227,9 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
                 @CameraMovement.started -= m_Wrapper.m_PlayerControlActionsCallbackInterface.OnCameraMovement;
                 @CameraMovement.performed -= m_Wrapper.m_PlayerControlActionsCallbackInterface.OnCameraMovement;
                 @CameraMovement.canceled -= m_Wrapper.m_PlayerControlActionsCallbackInterface.OnCameraMovement;
+                @CursorLock.started -= m_Wrapper.m_PlayerControlActionsCallbackInterface.OnCursorLock;
+                @CursorLock.performed -= m_Wrapper.m_PlayerControlActionsCallbackInterface.OnCursorLock;
+                @CursorLock.canceled -= m_Wrapper.m_PlayerControlActionsCallbackInterface.OnCursorLock;
             }
             m_Wrapper.m_PlayerControlActionsCallbackInterface = instance;
             if (instance != null)
@@ -214,6 +240,9 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
                 @CameraMovement.started += instance.OnCameraMovement;
                 @CameraMovement.performed += instance.OnCameraMovement;
                 @CameraMovement.canceled += instance.OnCameraMovement;
+                @CursorLock.started += instance.OnCursorLock;
+                @CursorLock.performed += instance.OnCursorLock;
+                @CursorLock.canceled += instance.OnCursorLock;
             }
         }
     }
@@ -222,5 +251,6 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
     {
         void OnMovement(InputAction.CallbackContext context);
         void OnCameraMovement(InputAction.CallbackContext context);
+        void OnCursorLock(InputAction.CallbackContext context);
     }
 }

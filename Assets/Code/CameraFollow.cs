@@ -21,7 +21,9 @@ public class CameraFollow : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+        //makes the camera look at the window of the boat - ideal focus point
         transform.LookAt(targetLook);
+        //smoothly moves the camera to the camera target child of the boat
         transform.position = Vector3.SmoothDamp(transform.position, targetPosition.position, ref velocity, smoothTime);
     }
 }

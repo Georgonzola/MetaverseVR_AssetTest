@@ -7,7 +7,6 @@ public class RouteFollow : MonoBehaviour
     [SerializeField]
     private Transform track;
     private Transform[] beziers;
-    private Vector3 objectPosition;
 
     private float timer;
     public float moveSpeed;
@@ -24,7 +23,7 @@ public class RouteFollow : MonoBehaviour
         coroutineActive = false;
 
         beziers = new Transform[track.childCount];
-
+        //Gets all of the beziers in the track
         for(int i = 0; i < track.childCount; i++) {
             beziers[i] = track.GetChild(i).transform;
         }
@@ -41,39 +40,43 @@ public class RouteFollow : MonoBehaviour
 
     private IEnumerator FollowRoute(int bezierNum)
     {
+        //prevents triggering the coroutine every frame
         coroutineActive = true;
-
 
 
         float size = GetBezierLength(beziers[bezierNum])/10;
 
-        Vector3 control1 = beziers[bezierNum].GetChild(0).position;
-        Vector3 control2 = beziers[bezierNum].GetChild(1).position;
-        Vector3 control3 = beziers[bezierNum].GetChild(2).position;
-        Vector3 control4 = beziers[bezierNum].GetChild(3).position;
+        Vector3[] cPoints = new Vector3[4];
+
+
+        //gets all of the control points in the bezier curve
+        for(int i = 0; i< 4 ; i++)
+            cPoints[i] = beziers[bezierNum].GetChild(i).position;
+        
+
 
         while (timer < 1)
         {
+            //Moves the follow object along the bezier curve with a speed relative to its size
             timer += Time.deltaTime * moveSpeed/ size;
-
-            objectPosition = Mathf.Pow(1 - timer, 3) * control1 + 3 * Mathf.Pow(1 - timer, 2) * timer * control2 + 3 * (1 - timer) * Mathf.Pow(timer, 2) * control3 + Mathf.Pow(timer, 3) * control4;
-
-            transform.position = objectPosition;
+            transform.position =  Mathf.Pow(1 - timer, 3) * cPoints[0] + 3 * Mathf.Pow(1 - timer, 2) * timer * cPoints[1] + 3 * (1 - timer) * Mathf.Pow(timer, 2) * cPoints[2] + Mathf.Pow(timer, 3) * cPoints[3];
             yield return new WaitForEndOfFrame();
         }
 
         timer = 0;
-        currentBezier += 1;
+        currentBezier ++;
 
         if (currentBezier > beziers.Length - 1)
         {
             currentBezier = 0;
         }
 
-        coroutineActive = false; ;
+        coroutineActive = false;
 
     }
 
+
+    //Gets the approximate length of the bezier curve to modify the speed of the follow object
     private float GetBezierLength(Transform activeBezier)
     {
         Vector3 currentPosition;

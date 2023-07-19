@@ -21,12 +21,7 @@ public class MenuStateTextChange : MonoBehaviour
     {
         if (doSetText)
         {
-            
-            if(winTracker == null) {
-                winTracker = GameObject.Find("WinStateTracker").GetComponent<WinStateTracker>();
-                Debug.Log("resetReference");
-            }
-
+            //modifies the text component depending on whether or not the player achieved the objective
             if (winTracker.getWinState())
             {
                 menuText.text = "You Win!";

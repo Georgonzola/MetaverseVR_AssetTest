@@ -6,19 +6,14 @@ public class GameCompletion : MonoBehaviour
 {
 
 
-    private float countdownTotal = 3f;
+    private float countdownTotal;
     private float countdown = 3f;
-    // Start is called before the first frame update
 
     private BoxCollider completionBox;
 
     [SerializeField] private Transform[] floaterPoints;
-
     [SerializeField] private MenuController menuController;
-
-
     [SerializeField] private Material compMat;
-
     [SerializeField] private Transform player;
 
 
@@ -28,11 +23,10 @@ public class GameCompletion : MonoBehaviour
 
     private float green = 95f;
     private bool allIn = false;
-
-
     
     void Awake()
     {
+        countdownTotal = countdown;
         completionBox = GetComponent<BoxCollider>();
         yellow = new Color32(244, 255, 92, 1);
         currentColour = yellow;
@@ -42,6 +36,7 @@ public class GameCompletion : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //Checks whether the four bounding points of the boat are within the completion zone
         allIn = true;
         for(int i = 0; i < floaterPoints.Length; i++)
         {
@@ -51,21 +46,27 @@ public class GameCompletion : MonoBehaviour
             }
         }
 
+
+        //getting the player forward position to prevent the player from triggering completion when facing the wrong way
+        //ideally this should be done by comparing it to the completion box's forward vector to allow the code to be used regardless of the completion box's rotation
         if (allIn && player.forward.z < 0)
         {
-           // Debug.Log(countdown);
+            //decrease timer and scale colour to green
             countdown -= Time.deltaTime;
             currentColour.r = (byte)remap(countdown, countdownTotal, 0, 244, green);
             compMat.SetColor("_Colour", currentColour);
         }
         else
         {
+
+            //reset timer and colour
             countdown = countdownTotal;
             compMat.SetColor("_Colour", yellow);
         }
 
         if(countdown < 0)
         {
+            //trigger win state on the dont destroy tracker and change scenes
             WinStateTracker winTracker = GameObject.Find("WinStateTracker").GetComponent<WinStateTracker>();
             winTracker.setWinState(true);
             menuController.changeScene(2);

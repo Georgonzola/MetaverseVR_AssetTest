@@ -8,6 +8,7 @@ public class BoatCollision : MonoBehaviour
     {
         if(other.transform.parent.parent.TryGetComponent<PlayerBoatController>(out PlayerBoatController playerBoatScript))
         {
+            //Trigger player hit event
             playerBoatScript.OnShipHit(transform.position);
         }
     }

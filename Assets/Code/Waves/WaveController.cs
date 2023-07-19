@@ -4,19 +4,12 @@ using System.Collections.Generic;
 using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEngine;
-using static UnityEditor.PlayerSettings;
-using static UnityEngine.GraphicsBuffer;
 
 public class WaveController : MonoBehaviour
 {
 
 
-    //[SerializeField] private float waveSpeed = 0.03f;
-    //[SerializeField] private float waveDirection = 45f;
-    //[SerializeField] private float waveSize = 20f;
-
     private int planeDetail = 250;
-    private int planeSize = 1;
 
     private MeshFilter meshFilter;
 
@@ -41,40 +34,40 @@ public class WaveController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-       setWaves();
-
+       //setWaves(); used to displace the vextices of the water mesh plane, this is now done in the shader graph to improve framerate
     }
     private void GenerateGeometry()
     {
 
+        Vector3[] vertices = new Vector3[(planeDetail + 1) * (planeDetail + 1)];
 
-        var verts = new Vector3[(planeDetail + 1) * (planeDetail + 1)];
-
-        //equaly distributed verts
+        //spaces the vertices
         for (int x = 0; x <= planeDetail; x++)
             for (int z = 0; z <= planeDetail; z++)
-                verts[index(x, z)] = new Vector3(x * planeSize, 0, z * planeSize);
+                vertices[index(x, z)] = new Vector3(x, 0, z);
+        //assigns the vertices to the mesh
+        mesh.vertices = vertices;
 
-        mesh.vertices = verts;
 
+        int[] tris = new int[mesh.vertices.Length * 6];
 
-        var tries = new int[mesh.vertices.Length * 6];
-
-        //two triangles are one tile
+        //generates triangles from the vertices
         for (int x = 0; x < planeDetail; x++)
         {
             for (int z = 0; z < planeDetail; z++)
             {
-                tries[index(x, z) * 6 + 0] = index(x, z);
-                tries[index(x, z) * 6 + 1] = index(x + 1, z + 1);
-                tries[index(x, z) * 6 + 2] = index(x + 1, z);
-                tries[index(x, z) * 6 + 3] = index(x, z);
-                tries[index(x, z) * 6 + 4] = index(x, z + 1);
-                tries[index(x, z) * 6 + 5] = index(x + 1, z + 1);
+                tris[index(x, z) * 6 + 0] = index(x, z);
+                tris[index(x, z) * 6 + 1] = index(x + 1, z + 1);
+                tris[index(x, z) * 6 + 2] = index(x + 1, z);
+                tris[index(x, z) * 6 + 3] = index(x, z);
+                tris[index(x, z) * 6 + 4] = index(x, z + 1);
+                tris[index(x, z) * 6 + 5] = index(x + 1, z + 1);
             }
         }
 
-        mesh.triangles = tries;
+        //sets the tris of the mesh
+        mesh.triangles = tris;
+
 
         mesh.RecalculateBounds();
         mesh.RecalculateNormals();
@@ -84,8 +77,10 @@ public class WaveController : MonoBehaviour
     private int index(int x, int z)
     {
         return x * (planeDetail + 1) + z;
-    }
+    } 
 
+    //Previous wave generation code
+    /*
     private void setWaves()
     {
         var verts = mesh.vertices;
@@ -113,9 +108,11 @@ public class WaveController : MonoBehaviour
         mesh.vertices = verts;
         mesh.RecalculateNormals();
     }
+    */
 
     public float getWaveHeight(Vector3 pos)
     {
+        //Gets wave height for floater position using the same sine wave math as the shader graph
         float y = 0;
 
         for (int w = 0; w < Waves.Length; w++)
@@ -131,7 +128,7 @@ public class WaveController : MonoBehaviour
 
     }
 
-
+    //structure containing all of the data needed for the wave, this was previously used to adjust the mesh visually on runtime when it used setWaves()
     [Serializable]
     public struct WaveData
     {

@@ -27,21 +27,24 @@ public class SunseekerMovement : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+        //Stores previous rotation
         Vector2 previousRotation = new Vector2(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.z);
         transform.LookAt(targetLocation.position);
+        //restores rotation to previous state on the x and z axis so the boat only rotattes to look at the follow object on the y
         transform.rotation = Quaternion.Euler(previousRotation.x, transform.rotation.eulerAngles.y, previousRotation.y);
 
+        //adds a forward force to the boat
         sunRB.AddRelativeForce(Vector3.forward * moveSpeed, ForceMode.Impulse);
 
+        //limits maximum forward speed
         if (sunRB.velocity.magnitude > maxForwardSpeed)
         {
             sunRB.velocity = sunRB.velocity.normalized * maxForwardSpeed;
         }
 
+
+        //gets the distance of the follow object and modifies it speed so that the boat cannot either lag behind or get too close
         float distance = Vector3.Distance(transform.position, targetLocation.position);
-
-
-
         targetLocationScript.moveSpeed = remap(distance, distMin, distMax, speedMax, 0);
 
 

@@ -13,9 +13,9 @@ public class MenuController : MonoBehaviour
         
         if (sceneIndex == 1)
         {
+            //resets the win state when returning back to the game scene
             WinStateTracker winTracker = GameObject.Find("/WinStateTracker").GetComponent<WinStateTracker>();
             winTracker.setWinState(false);
-            
         }
 
     }
