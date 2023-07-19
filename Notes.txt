@@ -1,0 +1,20 @@
+Executable is located in the FullBuild folder
+
+WASD to move, left click toggles cursor lock
+
+When running in Unity, LoadScene needs to be loaded first or alongside GameScene as it contains data relevant to game completion and player control
+This is not an issue in the build as load scene is always run first
+
+Line 19 in BezierVisualiser.cs needs to be commented out before building as Handles causes an error on build
+The Handles tool is still useful in Unity when editing beziers so it hasn't been removed completely
+
+Collision on the Sunseekers is inaccurate as I had to use a box collider opposed to a mesh collider for the sunseekers as adding the mesh collider on the child which contains the 3d model caused issues with the collider not triggering.
+I couldn't use the mesh collider on the parent object as it showed up smaller and at a vertical angle. 
+
+Plane mesh waves should ideally be done on a text-based compute shader to save further hassle as the visual shader graph is difficult to organise and update.
+(for example if a new wave type was implemented all the nodes would have to be adjusted instead of a few lines of code)
+Unfortunately I did not have the time to learn how to implement these properly.
+
+Reflections on the water are inaccurate but are still kept in for visual effect
+
+Player boat could do with a depth mask to cut out the water clipping into the boat
