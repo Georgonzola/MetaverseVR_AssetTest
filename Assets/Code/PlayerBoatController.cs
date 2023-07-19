@@ -46,7 +46,7 @@ public class PlayerBoatController : MonoBehaviour
         //Set movement
         if (playerInput.GetCharacterMovement().y < 0)
         {
-            multiplier = 0.1f;
+            multiplier = 0.15f;
         }
 
 
@@ -103,7 +103,7 @@ public class PlayerBoatController : MonoBehaviour
     {
         //Debug.Log(playerInput.GetMouseMovement());
 
-        cameraTarget.RotateAround(windowPosition.position, Vector3.up, -playerInput.GetMouseMovement().x*mouseSensitivity*Time.deltaTime * -1);
+        cameraTarget.RotateAround(windowPosition.position, Vector3.up, playerInput.GetMouseMovement().x*mouseSensitivity*Time.deltaTime);
 
     }
 

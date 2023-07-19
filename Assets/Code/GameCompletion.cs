@@ -19,6 +19,9 @@ public class GameCompletion : MonoBehaviour
 
     [SerializeField] private Material compMat;
 
+    [SerializeField] private Transform player;
+
+
     private Color32 yellow;
     private Color32 currentColour;
 
@@ -48,7 +51,7 @@ public class GameCompletion : MonoBehaviour
             }
         }
 
-        if (allIn)
+        if (allIn && player.forward.z < 0)
         {
            // Debug.Log(countdown);
             countdown -= Time.deltaTime;

@@ -496,6 +496,7 @@ GameObject:
   - component: {fileID: 7745166033469931142}
   - component: {fileID: 1866147000}
   - component: {fileID: 1866147001}
+  - component: {fileID: 1527125849}
   m_Layer: 0
   m_Name: Powerboat
   m_TagString: Untagged
@@ -548,6 +549,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerInput: {fileID: 0}
+  health: 5
+  menuController: {fileID: 1527125849}
+  healthUI: {fileID: 0}
+  cameraTarget: {fileID: 1508850367}
+  windowPosition: {fileID: 280330159047567421}
+--- !u!114 &1527125849
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6933163895583745084}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2dc0f26fc3f84f34ebc655e9465058db, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7686598791978736179
 GameObject:
   m_ObjectHideFlags: 0

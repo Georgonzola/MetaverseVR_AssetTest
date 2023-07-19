@@ -33,7 +33,7 @@ public class MenuStateTextChange : MonoBehaviour
             }
             else
             {
-                menuText.text = "You Died";
+                menuText.text = "You Lose";
             }
             doSetText = false;
         }
